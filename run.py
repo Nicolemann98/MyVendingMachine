@@ -228,12 +228,59 @@ def view_analytics():
     """
     This will give the manager the ability to view the analytics data tables
     """
-    # Most/least profitable item
-    # Highest/lowest selling item
-    # Low stocked items
+    
+    def view_analytics_summary():
+        """
+        This shows the user a summary of their highest/lowest sellers, their most/least profitable products and the products with low stock
+        """
+        most_profitable_product = all_products[0]
+        for product in all_products:
+            if product.income > most_profitable_product.income:
+                most_profitable_product = product
+        print(f"\nYour most profitable product is {most_profitable_product.item_name} making you {format_price(most_profitable_product.income)}")
+        input("Press enter to continue")
 
+        least_profitable_product = all_products[0]
+        for product in all_products:
+            if product.income < least_profitable_product.income:
+                least_profitable_product = product
+        print(f"\nYour least profitable product is {least_profitable_product.item_name} making you {format_price(least_profitable_product.income)}")
+        input("Press enter to continue")
 
-    print("View Analytics not yet implemented")
+        highest_selling_product = all_products[0]
+        for product in all_products:
+            if product.sales > highest_selling_product.sales:
+                highest_selling_product = product
+        print(f"\nYour highest selling product is {highest_selling_product.item_name} with {highest_selling_product.sales} sales")
+        input("Press enter to continue")
+
+        lowest_selling_product = all_products[0]
+        for product in all_products:
+            if product.sales < lowest_selling_product.sales:
+                lowest_selling_product = product
+        print(f"\nYour lowest selling product is {lowest_selling_product.item_name} with {lowest_selling_product.sales} sales")
+        input("Press enter to continue")
+
+        print("")
+        low_stocked = False
+        for product in all_products:
+            if (product.quantity == 0):
+                low_stocked = True
+                print(f"You have no stock on {product.item_name} consider refilling as soon as possible")
+            elif product.quantity < 5:
+                low_stocked = True
+                print(f"You have low stock on {product.item_name} with only {product.quantity} currently in stock")
+        if not low_stocked:
+            print("There are no products with low stock")
+        input("Press enter to continue")
+
+        print(f"\nThe current balance is {format_price(get_current_balance())}")
+
+    print("Do you want to see a summary of your sales/stock data?")
+    if (input("(y/n): ").lower() == "y"):
+        view_analytics_summary()
+
+    # TODO show all data
 
 def update_product_in_worksheet(product):
     """
