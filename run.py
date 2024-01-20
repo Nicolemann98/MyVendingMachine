@@ -12,9 +12,9 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("my_vending_machine")
 
-product_worksheet = SHEET.worksheet("product")
 
 all_products = []
+PRODUCT_QUANTITY_CELL_NUMBER = 2
 
 class Product():
     """
@@ -30,7 +30,7 @@ class Product():
         Takes the product object and shows in a user readable format for the menu screen, also lets user know if item is out of stock
         """
         if (self.is_item_in_stock()):
-            return f"{self.item_name} - {self.format_price()}"
+            return f"{self.item_name} - {self.format_price()} - {self.quantity} in stock"
         else:
             return f"{self.item_name} - OUT OF STOCK"
 
@@ -51,6 +51,7 @@ def set_up_products():
     """
     Takes the data from the product spreadsheet, creates a Product object for each row and adds to the all_products list
     """
+    product_worksheet = SHEET.worksheet("product")
     for product_unformatted in product_worksheet.get_all_values()[1:]:
         product = Product(product_unformatted[0], product_unformatted[1], product_unformatted[2])
         all_products.append(product)
@@ -59,11 +60,14 @@ def get_user_input():
     """
     Displays the welcome screen and asks the user for their item
     """
-    print("Welcome to the Vending Machine, what would you like today?")
-    print(f"Please enter a number between 1 and {len(all_products)}")
+    print("Welcome to the Vending Machine")
+    input("Please press enter to start")
+    print("What would you like today?")
+    print(f"Please enter a number between 0 and {len(all_products)} to choose your selection")
     for i in range(len(all_products)):
         product = all_products[i]
         print(f"{i}: {product.get_product_text()}")
+        # TODO rename this to stock manager and put shut down inside there
     print(f"{len(all_products)}: Shut down")
 
     is_selection_valid = False
@@ -74,14 +78,29 @@ def get_user_input():
     selection_number = int(selection)
 
     if selection_number == len(all_products):
+        # TODO stock manager workflow
         return True
     else:
         chosen_product = all_products[selection_number]
-        # TODO item dispensing wokflow
-        print(f"Dispensing {chosen_product.item_name}")
-        print("Thank you for using the vending machine today!")
-        print("----------------------------------------------")
+        dispense_item(chosen_product, selection_number)
         return False
+
+def dispense_item(product, selection_number):
+    """
+    This asks for the user's money, "dispenses" the item and adjusts the stock + money levels
+    """
+    print(f"You have chosen {product.item_name}")
+    print(f"That will be {product.format_price()} please")
+    input("Please press enter to insert the money")
+    print(f"Dispensing {product.item_name}")
+    print("Thank you for using the vending machine today!")
+
+    new_quantity = product.quantity - 1
+    product.quantity = new_quantity
+
+    product_worksheet = SHEET.worksheet("product")
+    product_worksheet.update_cell(selection_number + 2, PRODUCT_QUANTITY_CELL_NUMBER, str(new_quantity))
+
 
 def validate_selection(selection):
     """
