@@ -14,6 +14,25 @@ SHEET = GSPREAD_CLIENT.open("my_vending_machine")
 
 product = SHEET.worksheet("product")
 
-data = product.get_all_values()
+product_data = product.get_all_values()
 
-print(data)
+def get_user_input():
+    print("Welcome to the Vending Machine, what would you like today?")
+    # The items and stock manager login will go here
+    print("--------------------------------------------------")
+    return True
+
+
+def main():
+    """
+    Run the vending machine workflow
+    """
+    print("Starting Vending Machine. Welcome!")
+    while True:
+        should_quit = get_user_input()
+        if (should_quit):
+            break
+    print("Vending Machine Powering Down. Goodbye!")
+
+
+main()
