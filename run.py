@@ -98,7 +98,7 @@ def get_user_input():
 
     is_selection_valid = False
     while not is_selection_valid:
-        selection = input("Selection: ")
+        selection = input("Selection: \n")
         is_selection_valid = validate_selection(selection)
 
     selection_number = int(selection)
@@ -129,7 +129,7 @@ def manager_log_in():
     This contains all of the wokflow for the stock manager, including stock/price updates and data analytics retrieval 
     """
     CORRECT_MANAGER_PASSCODE = "1234"
-    passcode = input("Please enter passcode: ")
+    passcode = input("Please enter passcode: \n")
     if passcode != CORRECT_MANAGER_PASSCODE:
         print("That is incorrect. Returning to user screen")
         return False
@@ -142,7 +142,7 @@ def manager_log_in():
         print("3. View Sales Insights")
         print("4. Return to user screen")
         print("5. Power off")
-        selection = input("Selection: ")
+        selection = input("Selection: \n")
 
         if selection == "0":
             manager_update_stock()
@@ -159,7 +159,7 @@ def manager_log_in():
         else:
             print("That is not a valid selection, please try again.")
 
-        input("Press enter to continue")
+        input("Press enter to continue\n")
 
 def manager_update_stock():
     """
@@ -169,7 +169,7 @@ def manager_update_stock():
         print(f"There are currently {product.quantity} {product.item_name}")
         additions = 0
         while True:
-            additions_input = input("How many would you like to add? ")
+            additions_input = input("How many would you like to add?\n")
             try:
                 additions = int(additions_input)
                 product.quantity += additions
@@ -189,7 +189,7 @@ def manager_update_prices():
         print(f"{product.item_name} currently costs {format_price(product.price)}")
         new_price = 0
         while True:
-            price_input = input("What would you like the new price to be? ")
+            price_input = input("What would you like the new price to be?\n")
             try:
                 if (price_input == ""):
                     break
@@ -210,7 +210,7 @@ def remove_money():
     print(f"The current balance is {format_price(current_balance)}")
 
     while True:
-        remove_input = input("How much would you like to remove? ")
+        remove_input = input("How much would you like to remove?\n")
         try:
             money_to_reduce = int(remove_input)
             if money_to_reduce < current_balance:
@@ -238,21 +238,21 @@ def view_analytics():
             if product.income > most_profitable_product.income:
                 most_profitable_product = product
         print(f"\nYour most profitable product is {most_profitable_product.item_name} making you {format_price(most_profitable_product.income)}")
-        input("Press enter to continue")
+        input("Press enter to continue\n")
 
         least_profitable_product = all_products[0]
         for product in all_products:
             if product.income < least_profitable_product.income:
                 least_profitable_product = product
         print(f"\nYour least profitable product is {least_profitable_product.item_name} making you {format_price(least_profitable_product.income)}")
-        input("Press enter to continue")
+        input("Press enter to continue\n")
 
         highest_selling_product = all_products[0]
         for product in all_products:
             if product.sales > highest_selling_product.sales:
                 highest_selling_product = product
         print(f"\nYour highest selling product is {highest_selling_product.item_name} with {highest_selling_product.sales} sales")
-        input("Press enter to continue")
+        input("Press enter to continue\n")
 
         lowest_selling_product = all_products[0]
         for product in all_products:
@@ -291,11 +291,11 @@ def view_analytics():
             print(f"    Total Income: {format_price(product.income)}")
 
     print("Do you want to see a summary of your sales/stock data?")
-    if (input("(y/n): ").lower() == "y"):
+    if (input("(y/n):\n").lower() == "y"):
         view_analytics_summary()
 
     print("Do you want to see a your entire sales/stock data?")
-    if (input("(y/n): ").lower() == "y"):
+    if (input("(y/n):\n").lower() == "y"):
         view_all_analytics()
 
     # TODO show all data
