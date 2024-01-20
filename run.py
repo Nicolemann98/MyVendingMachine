@@ -30,9 +30,9 @@ class Product():
         Takes the product object and shows in a user readable format for the menu screen, also lets user know if item is out of stock
         """
         if (self.is_item_in_stock()):
-            return f"{self.item_name} - {self.format_price()} - {self.quantity} in stock"
+            return f"{self.item_name} - {self.format_price()} - {self.quantity} in stock."
         else:
-            return f"{self.item_name} - OUT OF STOCK"
+            return f"{self.item_name} - OUT OF STOCK."
 
     def format_price(self):
         """
@@ -60,15 +60,14 @@ def get_user_input():
     """
     Displays the welcome screen and asks the user for their item
     """
-    print("Welcome to the Vending Machine")
-    input("Please press enter to start")
+    print("Welcome to the Vending Machine.")
+    input("Please press enter to start.")
     print("What would you like today?")
-    print(f"Please enter a number between 0 and {len(all_products)} to choose your selection")
+    print(f"Please enter a number between 0 and {len(all_products)} to choose your selection.")
     for i in range(len(all_products)):
         product = all_products[i]
         print(f"{i}: {product.get_product_text()}")
-        # TODO rename this to stock manager and put shut down inside there
-    print(f"{len(all_products)}: Shut down")
+    print(f"{len(all_products)}: Log in as stock manager.")
 
     is_selection_valid = False
     while not is_selection_valid:
@@ -78,7 +77,7 @@ def get_user_input():
     selection_number = int(selection)
 
     if selection_number == len(all_products):
-        # TODO stock manager workflow
+        manager_log_in()
         return True
     else:
         chosen_product = all_products[selection_number]
@@ -89,11 +88,11 @@ def dispense_item(product, selection_number):
     """
     This asks for the user's money, "dispenses" the item and adjusts the stock + money levels
     """
-    print(f"You have chosen {product.item_name}")
-    print(f"That will be {product.format_price()} please")
-    input("Please press enter to insert the money")
-    print(f"Dispensing {product.item_name}")
-    print("Thank you for using the vending machine today!")
+    print(f"You have chosen {product.item_name}.")
+    print(f"That will be {product.format_price()} please.")
+    input("Please press enter to insert the money.")
+    print(f"Dispensing {product.item_name}.")
+    print("Thank you for using the vending machine today!\n\n")
 
     new_quantity = product.quantity - 1
     product.quantity = new_quantity
