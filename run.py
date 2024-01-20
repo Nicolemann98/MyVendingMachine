@@ -30,22 +30,22 @@ class Product():
         Takes the product object and shows in a user readable format for the menu screen, also lets user know if item is out of stock
         """
         if (self.is_item_in_stock()):
-            return f"{self.item_name} - {self.format_price()} - {self.quantity} in stock."
+            return f"{self.item_name} - {format_price(self.price)} - {self.quantity} in stock."
         else:
             return f"{self.item_name} - OUT OF STOCK."
-
-    def format_price(self):
-        """
-        Takes the price from a number in pence (e.g. 124) and returns it in standard price format (e.g. £1.24)
-        """
-        pounds = self.price // 100
-        pence = self.price % 100
-        
-        return f"£{pounds}.{str(pence).zfill(2)}"
 
     def is_item_in_stock(self):
         return self.quantity != 0
 
+
+def format_price(price_in_pence):  
+        """
+        Takes the price from a number in pence (e.g. 124) and returns it in standard price format (e.g. £1.24)
+        """  
+        pounds = price_in_pence // 100
+        pence = price_in_pence % 100
+        
+        return f"£{pounds}.{str(pence).zfill(2)}"
 
 def set_up_products():
     """
@@ -88,8 +88,11 @@ def dispense_item(product, selection_number):
     This asks for the user's money, "dispenses" the item and adjusts the stock + money levels
     """
     print(f"You have chosen {product.item_name}.")
-    print(f"That will be {product.format_price()} please.")
+    print(f"That will be {format_price(product.price)} please.")
     input("Please press enter to insert the money.")
+
+    add_row_to_money_worksheet(product.price)
+
     print(f"Dispensing {product.item_name}.")
     print("Thank you for using the vending machine today!\n\n")
 
@@ -152,7 +155,6 @@ def manager_update_stock():
                 break
             except:
                 print("That is not a valid input, please enter stock a whole number")
-                pass
 
 def manager_update_prices():
     """
@@ -163,7 +165,7 @@ def manager_update_prices():
     print("Press enter with no input to keep price the same.")
     print("Please enter the value in pence (e.g. if you want £1.20 then enter 120)")
     for product in all_products:
-        print(f"{product.item_name} currently costs {product.format_price()}")
+        print(f"{product.item_name} currently costs {format_price(product.price)}")
         new_price = 0
         while True:
             price_input = input("What would you like the new price to be? ")
@@ -176,13 +178,30 @@ def manager_update_prices():
                 break
             except:
                 print("That is not a valid input, please enter the new price in pence as a whole number")
-                pass
 
 def remove_money():
     """
     This will give the manager the ability to take monry out of the machine, adding a row to the balance column of money table
     """
-    print("Remove money not yet implemented")
+    print("Removing money")
+    print("Please enter the value in pence (e.g. if you want £11.20 then enter 1120)")
+    current_balance = get_current_balance()
+    print(f"The current balance is {format_price(current_balance)}")
+
+    while True:
+        remove_input = input("How much would you like to remove? ")
+        try:
+            money_to_reduce = int(remove_input)
+            if money_to_reduce < current_balance:
+                add_row_to_money_worksheet(-money_to_reduce)
+                break
+            else:
+                print("That is higher than the balance in the machine, please enter a lower amount.")
+        except:
+                print("That is not a valid input, please enter the new amount in pence as a whole number")
+    
+    print(f"Removed {format_price(money_to_reduce)}")
+    print(f"New balance {format_price(get_current_balance())}")
 
 def view_analytics():
     """
@@ -199,6 +218,19 @@ def update_product_in_worksheet(product):
 
     col_number = product_worksheet.find("price").col
     product_worksheet.update_cell(row_number, col_number, str(product.price))
+
+def add_row_to_money_worksheet(balance_increase):
+    money_worksheet = SHEET.worksheet("money")
+
+    current_balance = get_current_balance()
+    new_balance = current_balance + balance_increase
+    money_worksheet.append_row([str(current_balance + balance_increase)])
+
+def get_current_balance():
+    money_worksheet = SHEET.worksheet("money")
+    last_row = len(money_worksheet.get_all_values())
+    current_balance = money_worksheet.cell(last_row, 1).value
+    return int(current_balance)
 
 def validate_selection(selection):
     """
