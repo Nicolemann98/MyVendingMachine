@@ -17,3 +17,4 @@ gspread documentation: https://docs.gspread.org/en/latest/user-guide.html
 ## Struggles
 
 Issues with updating cells (rather than just adding new rows), found solution in gspread documentation (linked in credits)
+Part way through the commit for adding the salses insights, I realised that I didn't need a separate sales table as I could just add this data to the existing product table

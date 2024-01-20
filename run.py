@@ -20,10 +20,12 @@ class Product():
     """
     Creates instance of Product. The class variables of this object should match the column names of the product table
     """
-    def __init__(self, item_name, quantity, price):
+    def __init__(self, item_name, quantity, price, sales, income):
         self.item_name = item_name
         self.quantity = int(quantity)
         self.price = int(price)
+        self.sales = int(sales)
+        self.income = int(income)
 
     def get_product_text(self):
         """
@@ -36,6 +38,11 @@ class Product():
 
     def is_item_in_stock(self):
         return self.quantity != 0
+
+    def buy_item(self):
+        self.quantity -= 1
+        self.sales += 1
+        self.income += self.price
 
 
 def format_price(price_in_pence):  
@@ -53,16 +60,36 @@ def set_up_products():
     """
     product_worksheet = SHEET.worksheet("product")
     for product_unformatted in product_worksheet.get_all_values()[1:]:
-        product = Product(product_unformatted[0], product_unformatted[1], product_unformatted[2])
+        product = Product(product_unformatted[0], product_unformatted[1], product_unformatted[2], product_unformatted[3], product_unformatted[4])
         all_products.append(product)
 
 def get_user_input():
     """
     Displays the welcome screen and asks the user for their item
     """
-    print("Welcome to the Vending Machine.")
+    def validate_selection(selection):
+        """
+        Takes the user's selection input and checks that it is both a valid input and that the chosen item is in stock.
+        Returns True if the input is valid and False if it is invalid
+        """
+        if selection == str(len(all_products)):
+            #  this is for the stock manager selection option
+            return True
+        else:
+            try:
+                chosen_product = all_products[int(selection)]
+                if chosen_product.is_item_in_stock():
+                    return True
+                else:
+                    print(f"Apologies {chosen_product.item_name} is currently out of stock.")
+                    return False
+            except:
+                print(f"{selection} is not a valid input. Please select one of the options.")
+                return False
+
+    print("\nWelcome to the Vending Machine.")
     input("Please press enter to start.")
-    print("What would you like today?")
+    print("\nWhat would you like today?")
     print(f"Please enter a number between 0 and {len(all_products)} to choose your selection.")
     for i in range(len(all_products)):
         product = all_products[i]
@@ -90,16 +117,12 @@ def dispense_item(product, selection_number):
     print(f"You have chosen {product.item_name}.")
     print(f"That will be {format_price(product.price)} please.")
     input("Please press enter to insert the money.")
-
-    add_row_to_money_worksheet(product.price)
-
     print(f"Dispensing {product.item_name}.")
-    print("Thank you for using the vending machine today!\n\n")
+    print("Thank you for using the vending machine today!")
 
-    new_quantity = product.quantity - 1
-    product.quantity = new_quantity
-
+    product.buy_item()
     update_product_in_worksheet(product)
+    add_row_to_money_worksheet(product.price)
 
 def manager_log_in():
     """
@@ -112,11 +135,11 @@ def manager_log_in():
         return False
 
     while True:
-        print("What action would you like to perform?")
+        print("\nWhat action would you like to perform?")
         print("0. Update stock")
         print("1. Update prices")
         print("2. Remove Money")
-        print("3. View Analytics")
+        print("3. View Sales Insights")
         print("4. Return to user screen")
         print("5. Power off")
         selection = input("Selection: ")
@@ -205,6 +228,11 @@ def view_analytics():
     """
     This will give the manager the ability to view the analytics data tables
     """
+    # Most/least profitable item
+    # Highest/lowest selling item
+    # Low stocked items
+
+
     print("View Analytics not yet implemented")
 
 def update_product_in_worksheet(product):
@@ -219,6 +247,12 @@ def update_product_in_worksheet(product):
 
     col_number = product_worksheet.find("price").col
     product_worksheet.update_cell(row_number, col_number, str(product.price))
+
+    col_number = product_worksheet.find("sales").col
+    product_worksheet.update_cell(row_number, col_number, str(product.sales))
+
+    col_number = product_worksheet.find("income").col
+    product_worksheet.update_cell(row_number, col_number, str(product.income))
 
 def add_row_to_money_worksheet(balance_increase):
     """
@@ -240,26 +274,6 @@ def get_current_balance():
     last_row = len(money_worksheet.get_all_values())
     current_balance = money_worksheet.cell(last_row, 1).value
     return int(current_balance)
-
-def validate_selection(selection):
-    """
-    Takes the user's selection input and checks that it is both a valid input and that the chosen item is in stock.
-    Returns True if the input is valid and False if it is invalid
-    """
-    if selection == str(len(all_products)):
-        #  this is for the shut down selection option
-        return True
-    else:
-        try:
-            chosen_product = all_products[int(selection)]
-            if chosen_product.is_item_in_stock():
-                return True
-            else:
-                print(f"Apologies {chosen_product.item_name} is currently out of stock.")
-                return False
-        except:
-            print(f"{selection} is not a valid input. Please select one of the options.")
-            return False
 
 def main():
     """
