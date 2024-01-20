@@ -33,7 +33,7 @@ And a new row gets added to the money table with the current balance (calculated
    
 Now if the stock manager wants to log in, they have their own option after all of the products, when 7 is selected, it prompts the stock manager to enter their passcode (see Important Notes section). If they enter the wrong code, then they are told it is incorrect and it returns them back to the user screen.  
 ![manager_incorrect_passcode](assets/images/ManagerIncorrectPassword.png)  
-And when they procide the correct passcode, they are taken to the manager screen, where they can choose options to update the stock or prices, take their profits out of the machine, or view sales analytics.  
+And when they provide the correct passcode, they are taken to the manager screen, where they can choose options to update the stock or prices, take their profits out of the machine, or view sales analytics.  
 ![manager_correct_passcode](assets/images/ManagerCorrectPassword.png)  
   
 If they choose to update stock, they are product-by-product, told the current stock and asked how many they want to add.  
@@ -63,15 +63,20 @@ If they choose to return to the user screen, then it returns to the user screen 
 And finally they can choose to shut the machine down which terminates the program.  
 ![shutdown](assets/images/ShutDown.png)  
 
+### Bugs
+I have done extensive testing so am sufficiently happy that this is bug-free. JHowever during coding, there were bugs that I encountered and fixed. 
+- It turns out that there were runtime issues because the code was trying to turn the header line into a product object like it does for the rest of the rows. Once figuring out that this was the issue, I ended up making sure that the first row of the table was skipped for this.
+- After adding the sales and income colums to the product table, they never updated after a sale. I quickly discovered that the update_product_in_worksheet method was only coded to update the existing quantity and price columns, however this was easily fixed.  
+
 ## Credits
 
-Leading zeros: https://stackoverflow.com/questions/733454/best-way-to-format-integer-as-string-with-leading-zeros
+Leading zeros: https://stackoverflow.com/questions/733454/best-way-to-format-integer-as-string-with-leading-zeros  
 gspread documentation: https://docs.gspread.org/en/latest/user-guide.html
 
 ## Struggles
 
-Creating the initial data structure, in the end I created a class for my Product table that contains a class variable for each of the columns in the table. ANd then a variable that was a list of Product objects where each item of the list is a row in the table. This did bring challenges to the initial stages of writing the code because there was a lot of setting up that needed to be done and with a lot of though to exactly the best way to organise everything, however in the end, using object oriented programming it up allowed a lot of flexibility so that I could see all of the products to be able to access and update anything I needed fairly easily especially in the sales insights section of the project.
+Creating the initial data structure, in the end I created a class for my Product table that contains a class variable for each of the columns in the table. And then a variable that was a list of Product objects where each item of the list is a row in the table. This did bring challenges to the initial stages of writing the code because there was a lot of setting up that needed to be done and with a lot of thought to exactly the best way to organise everything, however in the end, using object oriented programming it allowed a lot of flexibility so that I could see all of the products to be able to access and update anything I needed fairly easily especially in the sales insights section of the project.
 
 Issues with updating cells, in the example project we only had to add new rows to the bottom of tables, however I needed to modify records directly and did not know how to do this. Thankfully after some web searching, I found the solution to my problem in the gspread documentation (linked in credits)
 
-Part way through the commit for adding the salses insights, I realised that I didn't need a separate sales table as I could just add this data to the existing product table. This did mean adjusting the Product class, however with the way I set up the objects, this actually ended up being simpler than initially thought
+Part way through the commit for adding the sales insights, I realised that I didn't need a separate sales table as I could just add this data to the existing product table. This did mean adjusting the Product class, however with the way I set up the objects, this actually ended up being simpler than initially thought
