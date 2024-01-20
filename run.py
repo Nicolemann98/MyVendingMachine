@@ -298,8 +298,6 @@ def view_analytics():
     if (input("(y/n):\n").lower() == "y"):
         view_all_analytics()
 
-    # TODO show all data
-
 def update_product_in_worksheet(product):
     """
     takes a Product object and updates the product worksheet so all the columns match

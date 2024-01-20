@@ -8,6 +8,31 @@ Before starting, I have created a short plan to help guide me through this proje
 ## Important notes
 The passcode for the stock manager is `1234`, Usually this would require encryption but this is out of scope for this project so will hard-code the passcode
 
+## Testing
+I have set up the product and money tables in this way before testing.
+product table: 
+![product_table](assets/images/ProductTable.png)
+money table:
+![money_table](assets/images/MoneyTable.png)
+
+When running the code for the first time (after pressing enter to continue), the user is asked which product they are wanting to buy.
+![selection_screen](assets/images/SelectionScreen.png)
+If the user provides an invalid input, then they are prompted to give another input. Examples of invalid inputs include, letters instead of numbers
+![invalid_selection_letters](assets/images/InvalidSelectionNotNumber.png)
+Number that is not shown in the list of selections
+![invalid_selection_high_number](assets/images/InvalidSelectionHighNumber.png)
+And in addition, any item that is out of stock
+![invalid_selection_out_of_stock](assets/images/InvalidSelectionOutOfStock.png)
+
+Howver, if instead, the user does give a valid input then it asks the user for money, the user presses enter as a proxy for paying, then it dispenses the item and goes back to the selection menu for the next user
+![valid_selection](assets/images/ValidSelection.png)
+Once this happens, the product table is updated to decrease the stock by 1, increase the sales by 1 and increase the income by the product's price
+![product_table_after_selection](assets/images/ProductTableAfterSelection.png)
+And a new row gets added to the money table with the current balance (calculated as the previous balance + the price of the bought product)
+![money_table_after_selection](assets/images/MoneyTableAfterSelection.png)
+
+
+
 
 ## Credits
 
