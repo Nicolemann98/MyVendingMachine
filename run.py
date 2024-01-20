@@ -18,7 +18,7 @@ PRODUCT_QUANTITY_CELL_NUMBER = 2
 
 class Product():
     """
-    Creates instance of Product
+    Creates instance of Product. The class variables of this object should match the column names of the product table
     """
     def __init__(self, item_name, quantity, price):
         self.item_name = item_name
@@ -142,7 +142,6 @@ def manager_update_stock():
     """
     This gives the manager the ability to update the quantity column of all items in product
     """
-
     for product in all_products:
         print(f"There are currently {product.quantity} {product.item_name}")
         additions = 0
@@ -160,7 +159,6 @@ def manager_update_prices():
     """
     This gives the manager the ability to update the price column of all items in product
     """
-
     print("Updating prices")
     print("Press enter with no input to keep price the same.")
     print("Please enter the value in pence (e.g. if you want £1.20 then enter 120)")
@@ -209,7 +207,10 @@ def view_analytics():
     """
     print("View Analytics not yet implemented")
 
-def update_product_in_worksheet(product):    
+def update_product_in_worksheet(product):
+    """
+    takes a Product object and updates the product worksheet so all the columns match
+    """
     product_worksheet = SHEET.worksheet("product")
     row_number = product_worksheet.find(product.item_name).row
 
@@ -220,6 +221,11 @@ def update_product_in_worksheet(product):
     product_worksheet.update_cell(row_number, col_number, str(product.price))
 
 def add_row_to_money_worksheet(balance_increase):
+    """
+    Takes how much we want to increase the machine's balance by and adds a row to the money table with
+    the balance increase added to the current balance (the bottom row of the money table)
+    Note: this is ADDITION, to subtract from the balance, ensure balance_increase is negative
+    """
     money_worksheet = SHEET.worksheet("money")
 
     current_balance = get_current_balance()
@@ -227,6 +233,9 @@ def add_row_to_money_worksheet(balance_increase):
     money_worksheet.append_row([str(current_balance + balance_increase)])
 
 def get_current_balance():
+    """
+    Takes the last row of balance from the money table - this is the current balance of the vending machine
+    """
     money_worksheet = SHEET.worksheet("money")
     last_row = len(money_worksheet.get_all_values())
     current_balance = money_worksheet.cell(last_row, 1).value
@@ -264,6 +273,5 @@ def main():
         if (should_power_off):
             break
     print("Vending Machine Powering Down. Goodbye!")
-
 
 main()
