@@ -29,10 +29,39 @@ However, if instead, the user does give a valid input then it asks the user for 
 Once this happens, the product table is updated to decrease the stock by 1, increase the sales by 1 and increase the income by the product's price  
 ![product_table_after_selection](assets/images/ProductTableAfterSelection.png)  
 And a new row gets added to the money table with the current balance (calculated as the previous balance + the price of the bought product)  
-![money_table_after_selection](assets/images/MoneyTableAfterSelection.png)
+![money_table_after_selection](assets/images/MoneyTableAfterSelection.png)  
+   
+Now if the stock manager wants to log in, they have their own option after all of the products, when 7 is selected, it prompts the stock manager to enter their passcode (see Important Notes section). If they enter the wrong code, then they are told it is incorrect and it returns them back to the user screen.  
+![manager_incorrect_passcode](assets/images/ManagerIncorrectPassword.png)  
+And when they procide the correct passcode, they are taken to the manager screen, where they can choose options to update the stock or prices, take their profits out of the machine, or view sales analytics.  
+![manager_correct_passcode](assets/images/ManagerCorrectPassword.png)  
+  
+If they choose to update stock, they are product-by-product, told the current stock and asked how many they want to add.  
+![stock_update](assets/images/StockUpdate.png)  
+And this is reflected in the quantity column of the product table  
+![product_table_after_stock_update](assets/images/ProductTableAfterStockUpdate.png)  
+  
+If they choose to update prices, they are product-by-product, told the current prices and asked what they want to update them to, any that is left as an empty line the price is kept the same, and for any invalid inputs, the user is asked to provide another
+![price_update](assets/images/PriceUpdate.png)  
+And this is reflected in the price column of the product table  
+![product_table_after_price_update](assets/images/ProductTableAfterPriceUpdate.png)  
+  
+If they choose to remove money, they are told the current balance and asked how much they'd like to remove, if they ask for more than the current balance, then they are asked again.  
+![money_remove](assets/images/MoneyRemove.png)  
+And this is reflected with a new row in the money table.  
+![money_table_after_money_remove](assets/images/MoneyTableAfterMoneyRemove.png)  
+  
+If they ask to see the sales insights, then they are initially asked if they want to see a summary of the data which (one-by-one) includes the most/least profitable products, the most/least selling products, which products have low/no stock and finally the current balance.  
+![insights_summary](assets/images/InsightsSummary.png)  
+Then they are asked if they want to see the entire data. This gives a printed version of all the data within the product table for if they need more detail, this data is given row-by-row each time they hit enter.  
+![insights-total-1](assets/images/InsightsTotal1.png)
+![insights-total-2](assets/images/InsightsTotal2.png)
 
 
-
+If they choose to return to the user screen, then it returns to the user screen for the next customer.  
+![return-to-user-screen](assets/images/ReturnToUserScreen.png)  
+And finally they can choose to shut the machine down which terminates the program.  
+![shutdown](assets/images/ShutDown.png)  
 
 ## Credits
 
