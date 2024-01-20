@@ -5,6 +5,9 @@
 Before starting, I have created a short plan to help guide me through this project
 ![Plan](assets/images/VendingMachinePlan.png)
 
+## Important notes
+The passcode for the stock manager is `1234`, Usually this would require encryption but this is out of scope for this project so will hard-code the passcode
+
 
 ## Credits
 

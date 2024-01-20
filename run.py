@@ -77,8 +77,7 @@ def get_user_input():
     selection_number = int(selection)
 
     if selection_number == len(all_products):
-        manager_log_in()
-        return True
+        return manager_log_in()
     else:
         chosen_product = all_products[selection_number]
         dispense_item(chosen_product, selection_number)
@@ -98,6 +97,67 @@ def dispense_item(product, selection_number):
     product.quantity = new_quantity
 
     update_stock(product)
+
+def manager_log_in():
+    """
+    This contains all of the wokflow for the stock manager, including stock/price updates and data analytics retrieval 
+    """
+    CORRECT_MANAGER_PASSCODE = "1234"
+    passcode = input("Please enter passcode: ")
+    if passcode != CORRECT_MANAGER_PASSCODE:
+        print("That is incorrect. Returning to user screen")
+        return False
+
+    while True:
+        print("What action would you like to perform?")
+        print("0. Update stock")
+        print("1. Update prices")
+        print("2. Remove Money")
+        print("3. View Analytics")
+        print("4. Return to user screen")
+        print("5. Power off")
+        selection = input("Selection: ")
+
+        if selection == "0":
+            manager_update_stock()
+        elif selection == "1":
+            update_prices()
+        elif selection == "2":
+            remove_money()
+        elif selection == "3":
+            view_analytics()
+        elif selection == "4":
+            return False
+        elif selection == "5":
+            return True
+        else:
+            print("That is not a valid selection, please try again.")
+
+        input("Press enter to continue")
+
+def manager_update_stock():
+    """
+    This will give the manager the ability to update the quantity column of all items in product
+    """
+    print("Update stock not yet implemented")
+
+def update_prices():
+    """
+    This will give the manager the ability to update the price column of all items in product
+    """
+    print("Update prices not yet implemented")
+
+def remove_money():
+    """
+    This will give the manager the ability to take monry out of the machine, adding a row to the balance column of money table
+    """
+    print("Remove money not yet implemented")
+
+def view_analytics():
+    """
+    This will give the manager the ability to view the analytics data tables
+    """
+    print("View Analytics not yet implemented")
 
 def update_stock(product):    
     product_worksheet = SHEET.worksheet("product")
@@ -133,8 +193,8 @@ def main():
     set_up_products()
 
     while True:
-        should_quit = get_user_input()
-        if (should_quit):
+        should_power_off = get_user_input()
+        if (should_power_off):
             break
     print("Vending Machine Powering Down. Goodbye!")
 
