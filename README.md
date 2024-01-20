@@ -1,5 +1,6 @@
 # My Vending Machine
-
+This is a command-line application written in Python. It allows the sales manager of a vending machine to keep
+track of stock levels within the vending machine, be able to set and update the available products and update pricing. In addition to this it allows the stock manager to glean market insights, including which products are the most and least selling items, total income from each product (including quantity of each product sold), and which products are low in stock and will need to be refilled. In terms of the financial aspect, it allows the stock manager to keep track of how much money is inside the vending machine and to withdraw money from it on demand. From a customer perspective, its a simple way of getting a tasty snack or beverage instantly.
 
 ## Plan
 Before starting, I have created a short plan to help guide me through this project
