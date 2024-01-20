@@ -22,32 +22,37 @@ class Product():
     """
     def __init__(self, item_name, quantity, price):
         self.item_name = item_name
-        self.quantity = quantity
-        self.price = price
+        self.quantity = int(quantity)
+        self.price = int(price)
 
     def get_product_text(self):
         """
-        Takes the product object and shows in a user readable format for the menu screen
+        Takes the product object and shows in a user readable format for the menu screen, also lets user know if item is out of stock
         """
-        return f"{self.item_name} - {self.format_price()}"
+        if (self.is_item_in_stock()):
+            return f"{self.item_name} - {self.format_price()}"
+        else:
+            return f"{self.item_name} - OUT OF STOCK"
 
     def format_price(self):
         """
         Takes the price from a number in pence (e.g. 124) and returns it in standard price format (e.g. £1.24)
         """
-        length = len(self.price)
-        pounds = self.price[:length-2]
-        if (pounds == ""):
-            pounds = "0"
-        pence = self.price[length-2:]
-        return f"£{pounds}.{pence}"
+        pounds = self.price // 100
+        pence = self.price % 100
+        
+        return f"£{pounds}.{str(pence).zfill(2)}"
+
+    def is_item_in_stock(self):
+        return self.quantity != 0
 
 
 def set_up_products():
     """
     Takes the data from the product spreadsheet, creates a Product object for each row and adds to the all_products list
     """
-    for product_unformatted in product_worksheet.get_all_values():
+    for product_unformatted in product_worksheet.get_all_values()[1:]:
+        print(product_unformatted[2])
         product = Product(product_unformatted[0], product_unformatted[1], product_unformatted[2])
         all_products.append(product)
 
