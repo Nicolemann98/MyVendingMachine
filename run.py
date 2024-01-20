@@ -96,7 +96,7 @@ def dispense_item(product, selection_number):
     new_quantity = product.quantity - 1
     product.quantity = new_quantity
 
-    update_stock(product)
+    update_product_in_worksheet(product)
 
 def manager_log_in():
     """
@@ -121,7 +121,7 @@ def manager_log_in():
         if selection == "0":
             manager_update_stock()
         elif selection == "1":
-            update_prices()
+            manager_update_prices()
         elif selection == "2":
             remove_money()
         elif selection == "3":
@@ -137,15 +137,46 @@ def manager_log_in():
 
 def manager_update_stock():
     """
-    This will give the manager the ability to update the quantity column of all items in product
+    This gives the manager the ability to update the quantity column of all items in product
     """
-    print("Update stock not yet implemented")
 
-def update_prices():
+    for product in all_products:
+        print(f"There are currently {product.quantity} {product.item_name}")
+        additions = 0
+        while True:
+            additions_input = input("How many would you like to add? ")
+            try:
+                additions = int(additions_input)
+                product.quantity += additions
+                update_product_in_worksheet(product)
+                break
+            except:
+                print("That is not a valid input, please enter stock a whole number")
+                pass
+
+def manager_update_prices():
     """
-    This will give the manager the ability to update the price column of all items in product
+    This gives the manager the ability to update the price column of all items in product
     """
-    print("Update prices not yet implemented")
+
+    print("Updating prices")
+    print("Press enter with no input to keep price the same.")
+    print("Please enter the value in pence (e.g. if you want £1.20 then enter 120)")
+    for product in all_products:
+        print(f"{product.item_name} currently costs {product.format_price()}")
+        new_price = 0
+        while True:
+            price_input = input("What would you like the new price to be? ")
+            try:
+                if (price_input == ""):
+                    break
+                new_price = int(price_input)
+                product.price = new_price
+                update_product_in_worksheet(product)
+                break
+            except:
+                print("That is not a valid input, please enter the new price in pence as a whole number")
+                pass
 
 def remove_money():
     """
@@ -159,11 +190,15 @@ def view_analytics():
     """
     print("View Analytics not yet implemented")
 
-def update_stock(product):    
+def update_product_in_worksheet(product):    
     product_worksheet = SHEET.worksheet("product")
     row_number = product_worksheet.find(product.item_name).row
+
     col_number = product_worksheet.find("quantity").col
     product_worksheet.update_cell(row_number, col_number, str(product.quantity))
+
+    col_number = product_worksheet.find("price").col
+    product_worksheet.update_cell(row_number, col_number, str(product.price))
 
 def validate_selection(selection):
     """
