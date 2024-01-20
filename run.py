@@ -98,9 +98,13 @@ def dispense_item(product, selection_number):
     new_quantity = product.quantity - 1
     product.quantity = new_quantity
 
-    product_worksheet = SHEET.worksheet("product")
-    product_worksheet.update_cell(selection_number + 2, PRODUCT_QUANTITY_CELL_NUMBER, str(new_quantity))
+    update_stock(product)
 
+def update_stock(product):    
+    product_worksheet = SHEET.worksheet("product")
+    row_number = product_worksheet.find(product.item_name).row
+    col_number = product_worksheet.find("quantity").col
+    product_worksheet.update_cell(row_number, col_number, str(product.quantity))
 
 def validate_selection(selection):
     """
