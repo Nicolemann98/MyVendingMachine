@@ -276,9 +276,27 @@ def view_analytics():
 
         print(f"\nThe current balance is {format_price(get_current_balance())}")
 
+    def view_all_analytics():
+        """
+        This shows the user everything in the product table + their current balance
+        """
+        print(f"\nThe current balance is {format_price(get_current_balance())}")
+
+        for product in all_products:
+            input("\nPress enter to continue")
+            print(f"\nProduct: {product.item_name}")
+            print(f"    Quantity: {product.quantity}")
+            print(f"    Price: {format_price(product.price)}")
+            print(f"    Total Sales: {product.sales}")
+            print(f"    Total Income: {format_price(product.income)}")
+
     print("Do you want to see a summary of your sales/stock data?")
     if (input("(y/n): ").lower() == "y"):
         view_analytics_summary()
+
+    print("Do you want to see a your entire sales/stock data?")
+    if (input("(y/n): ").lower() == "y"):
+        view_all_analytics()
 
     # TODO show all data
 
