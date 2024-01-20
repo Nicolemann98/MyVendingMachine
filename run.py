@@ -52,7 +52,6 @@ def set_up_products():
     Takes the data from the product spreadsheet, creates a Product object for each row and adds to the all_products list
     """
     for product_unformatted in product_worksheet.get_all_values()[1:]:
-        print(product_unformatted[2])
         product = Product(product_unformatted[0], product_unformatted[1], product_unformatted[2])
         all_products.append(product)
 
@@ -61,12 +60,48 @@ def get_user_input():
     Displays the welcome screen and asks the user for their item
     """
     print("Welcome to the Vending Machine, what would you like today?")
-    # The items and stock manager login will go here
+    print(f"Please enter a number between 1 and {len(all_products)}")
     for i in range(1, len(all_products)):
         product = all_products[i]
         print(f"{i}: {product.get_product_text()}")
-    return True
+    print(f"{len(all_products)}: Shut down")
 
+    is_selection_valid = False
+    while not is_selection_valid:
+        selection = input("Selection: ")
+        is_selection_valid = validate_selection(selection)
+
+    selection_number = int(selection)
+
+    if selection_number == len(all_products):
+        return True
+    else:
+        chosen_product = all_products[selection_number]
+        # TODO item dispensing wokflow
+        print(f"Dispensing {chosen_product.item_name}")
+        print("Thank you for using the vending machine today!")
+        print("----------------------------------------------")
+        return False
+
+def validate_selection(selection):
+    """
+    Takes the user's selection input and checks that it is both a valid input and that the chosen item is in stock.
+    Returns True if the input is valid and False if it is invalid
+    """
+    if selection == str(len(all_products)):
+        #  this is for the shut down selection option
+        return True
+    else:
+        try:
+            chosen_product = all_products[int(selection)]
+            if chosen_product.is_item_in_stock():
+                return True
+            else:
+                print(f"Apologies {chosen_product.item_name} is currently out of stock.")
+                return False
+        except:
+            print(f"{selection} is not a valid input. Please select one of the options.")
+            return False
 
 def main():
     """
