@@ -61,7 +61,7 @@ def get_user_input():
     """
     print("Welcome to the Vending Machine, what would you like today?")
     print(f"Please enter a number between 1 and {len(all_products)}")
-    for i in range(1, len(all_products)):
+    for i in range(len(all_products)):
         product = all_products[i]
         print(f"{i}: {product.get_product_text()}")
     print(f"{len(all_products)}: Shut down")
