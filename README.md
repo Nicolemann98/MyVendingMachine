@@ -67,7 +67,11 @@ And finally they can choose to shut the machine down which terminates the progra
 ### Bugs
 I have done extensive testing so am sufficiently happy that this is bug-free. JHowever during coding, there were bugs that I encountered and fixed. 
 - It turns out that there were runtime issues because the code was trying to turn the header line into a product object like it does for the rest of the rows. Once figuring out that this was the issue, I ended up making sure that the first row of the table was skipped for this.
-- After adding the sales and income colums to the product table, they never updated after a sale. I quickly discovered that the update_product_in_worksheet method was only coded to update the existing quantity and price columns, however this was easily fixed.  
+- After adding the sales and income colums to the product table, they never updated after a sale. I quickly discovered that the update_product_in_worksheet method was only coded to update the existing quantity and price columns, however this was easily fixed. 
+
+### Python Validator
+The code passes the Code Institure Linter Python Validation with zero errors.
+![no-errors](assets/images/NoErrors.png)
 
 ## Credits
 

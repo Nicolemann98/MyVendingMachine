@@ -16,9 +16,11 @@ SHEET = GSPREAD_CLIENT.open("my_vending_machine")
 all_products = []
 PRODUCT_QUANTITY_CELL_NUMBER = 2
 
+
 class Product():
     """
-    Creates instance of Product. The class variables of this object should match the column names of the product table
+    Creates instance of Product. The class variables of this object should
+    match the column names of the product table
     """
     def __init__(self, item_name, quantity, price, sales, income):
         self.item_name = item_name
@@ -29,10 +31,12 @@ class Product():
 
     def get_product_text(self):
         """
-        Takes the product object and shows in a user readable format for the menu screen, also lets user know if item is out of stock
+        Takes the product object and shows in a user readable format for the
+        menu screen, also lets user know if item is out of stock
         """
         if (self.is_item_in_stock()):
-            return f"{self.item_name} - {format_price(self.price)} - {self.quantity} in stock."
+            return f"{self.item_name} - {format_price(self.price)} - " +\
+                   f"{self.quantity} in stock."
         else:
             return f"{self.item_name} - OUT OF STOCK."
 
@@ -45,23 +49,30 @@ class Product():
         self.income += self.price
 
 
-def format_price(price_in_pence):  
-        """
-        Takes the price from a number in pence (e.g. 124) and returns it in standard price format (e.g. £1.24)
-        """  
-        pounds = price_in_pence // 100
-        pence = price_in_pence % 100
-        
-        return f"£{pounds}.{str(pence).zfill(2)}"
+def format_price(price_in_pence):
+    """
+    Takes the price from a number in pence (e.g. 124) and returns it in
+    standard price format (e.g. £1.24)
+    """
+    pounds = price_in_pence // 100
+    pence = price_in_pence % 100
+    return f"£{pounds}.{str(pence).zfill(2)}"
+
 
 def set_up_products():
     """
-    Takes the data from the product spreadsheet, creates a Product object for each row and adds to the all_products list
+    Takes the data from the product spreadsheet, creates a Product object for
+    each row and adds to the all_products list
     """
     product_worksheet = SHEET.worksheet("product")
     for product_unformatted in product_worksheet.get_all_values()[1:]:
-        product = Product(product_unformatted[0], product_unformatted[1], product_unformatted[2], product_unformatted[3], product_unformatted[4])
+        product = Product(product_unformatted[0],
+                          product_unformatted[1],
+                          product_unformatted[2],
+                          product_unformatted[3],
+                          product_unformatted[4])
         all_products.append(product)
+
 
 def get_user_input():
     """
@@ -69,7 +80,8 @@ def get_user_input():
     """
     def validate_selection(selection):
         """
-        Takes the user's selection input and checks that it is both a valid input and that the chosen item is in stock.
+        Takes the user's selection input and checks that it is both a valid
+        input and that the chosen item is in stock.
         Returns True if the input is valid and False if it is invalid
         """
         if selection == str(len(all_products)):
@@ -81,16 +93,19 @@ def get_user_input():
                 if chosen_product.is_item_in_stock():
                     return True
                 else:
-                    print(f"Apologies {chosen_product.item_name} is currently out of stock.")
+                    print(f"Apologies {chosen_product.item_name} is " +
+                          "currently out of stock.")
                     return False
-            except:
-                print(f"{selection} is not a valid input. Please select one of the options.")
+            except (ValueError, IndexError) as e:
+                print(f"{selection} is not a valid input. Please select one " +
+                      "of the options.")
                 return False
 
     print("\nWelcome to the Vending Machine.")
     input("Please press enter to start.")
     print("\nWhat would you like today?")
-    print(f"Please enter a number between 0 and {len(all_products)} to choose your selection.")
+    print(f"Please enter a number between 0 and {len(all_products)} to " +
+          "choose your selection.")
     for i in range(len(all_products)):
         product = all_products[i]
         print(f"{i}: {product.get_product_text()}")
@@ -110,9 +125,11 @@ def get_user_input():
         dispense_item(chosen_product, selection_number)
         return False
 
+
 def dispense_item(product, selection_number):
     """
-    This asks for the user's money, "dispenses" the item and adjusts the stock + money levels
+    This asks for the user's money, "dispenses" the item and adjusts the stock
+    and money levels
     """
     print(f"You have chosen {product.item_name}.")
     print(f"That will be {format_price(product.price)} please.")
@@ -124,9 +141,11 @@ def dispense_item(product, selection_number):
     update_product_in_worksheet(product)
     add_row_to_money_worksheet(product.price)
 
+
 def manager_log_in():
     """
-    This contains all of the wokflow for the stock manager, including stock/price updates and data analytics retrieval 
+    This contains all of the wokflow for the stock manager, including
+    stock/price updates and data analytics retrieval
     """
     CORRECT_MANAGER_PASSCODE = "1234"
     passcode = input("Please enter passcode: \n")
@@ -161,9 +180,11 @@ def manager_log_in():
 
         input("Press enter to continue\n")
 
+
 def manager_update_stock():
     """
-    This gives the manager the ability to update the quantity column of all items in product
+    This gives the manager the ability to update the quantity column of all
+    items in product
     """
     for product in all_products:
         print(f"There are currently {product.quantity} {product.item_name}")
@@ -175,18 +196,23 @@ def manager_update_stock():
                 product.quantity += additions
                 update_product_in_worksheet(product)
                 break
-            except:
-                print("That is not a valid input, please enter stock a whole number")
+            except ValueError:
+                print("That is not a valid input, please enter stock a " +
+                      "whole number")
+
 
 def manager_update_prices():
     """
-    This gives the manager the ability to update the price column of all items in product
+    This gives the manager the ability to update the price column of all items
+    in product
     """
     print("Updating prices")
     print("Press enter with no input to keep price the same.")
-    print("Please enter the value in pence (e.g. if you want £1.20 then enter 120)")
+    print("Please enter the value in pence (e.g. if you want £1.20 then " +
+          "enter 120)")
     for product in all_products:
-        print(f"{product.item_name} currently costs {format_price(product.price)}")
+        print(f"{product.item_name} currently costs " +
+              f"{format_price(product.price)}")
         new_price = 0
         while True:
             price_input = input("What would you like the new price to be?\n")
@@ -197,15 +223,19 @@ def manager_update_prices():
                 product.price = new_price
                 update_product_in_worksheet(product)
                 break
-            except:
-                print("That is not a valid input, please enter the new price in pence as a whole number")
+            except ValueError:
+                print("That is not a valid input, please enter the new " +
+                      "price in pence as a whole number")
+
 
 def remove_money():
     """
-    This will give the manager the ability to take monry out of the machine, adding a row to the balance column of money table
+    This will give the manager the ability to take monry out of the machine,
+    adding a row to the balance column of money table
     """
     print("Removing money")
-    print("Please enter the value in pence (e.g. if you want £11.20 then enter 1120)")
+    print("Please enter the value in pence " +
+          "(e.g. if you want £11.20 then enter 1120)")
     current_balance = get_current_balance()
     print(f"The current balance is {format_price(current_balance)}")
 
@@ -217,48 +247,58 @@ def remove_money():
                 add_row_to_money_worksheet(-money_to_reduce)
                 break
             else:
-                print("That is higher than the balance in the machine, please enter a lower amount.")
-        except:
-                print("That is not a valid input, please enter the new amount in pence as a whole number")
-    
+                print("That is higher than the balance in the machine, " +
+                      "please enter a lower amount.")
+        except ValueError:
+            print("That is not a valid input, please enter the new amount " +
+                  "in pence as a whole number")
     print(f"Removed {format_price(money_to_reduce)}")
     print(f"New balance {format_price(get_current_balance())}")
+
 
 def view_analytics():
     """
     This will give the manager the ability to view the analytics data tables
     """
-    
     def view_analytics_summary():
         """
-        This shows the user a summary of their highest/lowest sellers, their most/least profitable products and the products with low stock
+        This shows the user a summary of their highest/lowest sellers, their
+        most/least profitable products and the products with low stock
         """
         most_profitable_product = all_products[0]
         for product in all_products:
             if product.income > most_profitable_product.income:
                 most_profitable_product = product
-        print(f"\nYour most profitable product is {most_profitable_product.item_name} making you {format_price(most_profitable_product.income)}")
+        print(f"\nYour most profitable product is " +
+              f"{most_profitable_product.item_name} making you " +
+              f"{format_price(most_profitable_product.income)}")
         input("Press enter to continue\n")
 
         least_profitable_product = all_products[0]
         for product in all_products:
             if product.income < least_profitable_product.income:
                 least_profitable_product = product
-        print(f"\nYour least profitable product is {least_profitable_product.item_name} making you {format_price(least_profitable_product.income)}")
+        print(f"\nYour least profitable product is " +
+              f"{least_profitable_product.item_name} making you " +
+              f"{format_price(least_profitable_product.income)}")
         input("Press enter to continue\n")
 
         highest_selling_product = all_products[0]
         for product in all_products:
             if product.sales > highest_selling_product.sales:
                 highest_selling_product = product
-        print(f"\nYour highest selling product is {highest_selling_product.item_name} with {highest_selling_product.sales} sales")
+        print(f"\nYour highest selling product is " +
+              f"{highest_selling_product.item_name} with " +
+              f"{highest_selling_product.sales} sales")
         input("Press enter to continue\n")
 
         lowest_selling_product = all_products[0]
         for product in all_products:
             if product.sales < lowest_selling_product.sales:
                 lowest_selling_product = product
-        print(f"\nYour lowest selling product is {lowest_selling_product.item_name} with {lowest_selling_product.sales} sales")
+        print(f"\nYour lowest selling product is " +
+              f"{lowest_selling_product.item_name} with " +
+              f"{lowest_selling_product.sales} sales")
         input("Press enter to continue")
 
         print("")
@@ -266,21 +306,26 @@ def view_analytics():
         for product in all_products:
             if (product.quantity == 0):
                 low_stocked = True
-                print(f"You have no stock on {product.item_name} consider refilling as soon as possible")
+                print(f"You have no stock on {product.item_name} consider " +
+                      "refilling as soon as possible")
             elif product.quantity < 5:
                 low_stocked = True
-                print(f"You have low stock on {product.item_name} with only {product.quantity} currently in stock")
+                print(f"You have low stock on {product.item_name} with only " +
+                      f"{product.quantity} currently in stock")
         if not low_stocked:
             print("There are no products with low stock")
         input("Press enter to continue")
 
-        print(f"\nThe current balance is {format_price(get_current_balance())}")
+        print(f"\nThe current balance is " +
+              f"{format_price(get_current_balance())}")
 
     def view_all_analytics():
         """
-        This shows the user everything in the product table + their current balance
+        This shows the user everything in the product table + their current
+        balance
         """
-        print(f"\nThe current balance is {format_price(get_current_balance())}")
+        print(f"\nThe current balance is " +
+              f"{format_price(get_current_balance())}")
 
         for product in all_products:
             input("\nPress enter to continue")
@@ -298,15 +343,18 @@ def view_analytics():
     if (input("(y/n):\n").lower() == "y"):
         view_all_analytics()
 
+
 def update_product_in_worksheet(product):
     """
-    takes a Product object and updates the product worksheet so all the columns match
+    takes a Product object and updates the product worksheet so all the
+    columns match
     """
     product_worksheet = SHEET.worksheet("product")
     row_number = product_worksheet.find(product.item_name).row
 
     col_number = product_worksheet.find("quantity").col
-    product_worksheet.update_cell(row_number, col_number, str(product.quantity))
+    product_worksheet.update_cell(row_number, col_number,
+                                  str(product.quantity))
 
     col_number = product_worksheet.find("price").col
     product_worksheet.update_cell(row_number, col_number, str(product.price))
@@ -317,11 +365,14 @@ def update_product_in_worksheet(product):
     col_number = product_worksheet.find("income").col
     product_worksheet.update_cell(row_number, col_number, str(product.income))
 
+
 def add_row_to_money_worksheet(balance_increase):
     """
-    Takes how much we want to increase the machine's balance by and adds a row to the money table with
-    the balance increase added to the current balance (the bottom row of the money table)
-    Note: this is ADDITION, to subtract from the balance, ensure balance_increase is negative
+    Takes how much we want to increase the machine's balance by and adds a row
+    to the money table with the balance increase added to the current balance
+    (the bottom row of the money table)
+    Note: this is ADDITION, to subtract from the balance, ensure
+    balance_increase is negative
     """
     money_worksheet = SHEET.worksheet("money")
 
@@ -329,14 +380,17 @@ def add_row_to_money_worksheet(balance_increase):
     new_balance = current_balance + balance_increase
     money_worksheet.append_row([str(current_balance + balance_increase)])
 
+
 def get_current_balance():
     """
-    Takes the last row of balance from the money table - this is the current balance of the vending machine
+    Takes the last row of balance from the money table - this is the current
+    balance of the vending machine
     """
     money_worksheet = SHEET.worksheet("money")
     last_row = len(money_worksheet.get_all_values())
     current_balance = money_worksheet.cell(last_row, 1).value
     return int(current_balance)
+
 
 def main():
     """
@@ -350,5 +404,6 @@ def main():
         if (should_power_off):
             break
     print("Vending Machine Powering Down. Goodbye!")
+
 
 main()
