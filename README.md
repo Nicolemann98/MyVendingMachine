@@ -73,10 +73,20 @@ I have done extensive testing so am sufficiently happy that this is bug-free. JH
 The code passes the Code Institure Linter Python Validation with zero errors.
 ![no-errors](assets/images/NoErrors.png)
 
+## Deployment
+This project was deployed using Code Institute's mock terminal for Heroku
+- Steps for deployment
+    - Fork or clone this repository
+    - Create a new Heroku app
+    - Set the buildbacks to `Python` and `NodeJS` in that order
+    - Link the Heroku app to the repository
+    - Click on deploy
+
 ## Credits
 
 Leading zeros: https://stackoverflow.com/questions/733454/best-way-to-format-integer-as-string-with-leading-zeros  
 gspread documentation: https://docs.gspread.org/en/latest/user-guide.html
+Code institute course materials
 
 ## Struggles
 
