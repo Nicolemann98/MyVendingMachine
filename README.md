@@ -7,7 +7,8 @@ Before starting, I have created a short plan to help guide me through this proje
 ![Plan](assets/images/VendingMachinePlan.png)
 
 ## Important notes
-The passcode for the stock manager is `1234`, Usually this would require encryption but this is out of scope for this project so will hard-code the passcode
+The passcode for the stock manager is `1234`, Usually this would require encryption but this is out of scope for this project so will hard-code the passcode  
+To directly access the google sheets spreadsheet, use the following link https://docs.google.com/spreadsheets/d/15x6Tn-_1WbTzfdw9i4Eu5DE4dLPoPlo7LKEdUpMfsGg/edit?usp=sharing
 
 ## Testing
 I have set up the product and money tables in this way before testing.  
